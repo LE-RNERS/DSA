@@ -1,0 +1,154 @@
+import java.util.*;
+
+public class ArrayProblems {
+
+    // Segregate 0s and 1s
+    public static int[] segregate01(int[] arr) {
+        int low = 0, high = arr.length - 1;
+
+        while (low < high) {
+            if (arr[low] == 0) {
+                low++;
+            } else if (arr[high] == 1) {
+                high--;
+            } else {
+                int temp = arr[low];
+                arr[low] = arr[high];
+                arr[high] = temp;
+                low++;
+                high--;
+            }
+        }
+        return arr;
+    }
+
+    // Segregate 0s, 1s, and 2s
+    public static int[] segregate012(int[] arr) {
+        int p0 = 0, p1 = 0, p2 = arr.length - 1;
+
+        while (p1 <= p2) {
+            if (arr[p1] == 1) {
+                p1++;
+            } else if (arr[p1] == 0) {
+                int temp = arr[p0];
+                arr[p0] = arr[p1];
+                arr[p1] = temp;
+                p0++;
+                p1++;
+            } else {
+                int temp = arr[p1];
+                arr[p1] = arr[p2];
+                arr[p2] = temp;
+                p2--;
+            }
+        }
+        return arr;
+    }
+
+    // Two-sum with sum zero
+    public static List<int[]> twoSum(int[] arr) {
+        Arrays.sort(arr);
+        List<int[]> result = new ArrayList<>();
+        int low = 0, high = arr.length - 1;
+
+        while (low < high) {
+            int sum = arr[low] + arr[high];
+            if (sum == 0) {
+                result.add(new int[]{arr[low], arr[high]});
+
+                // Skip duplicates
+                while (low < high && arr[low] == arr[low + 1]) {
+                    low++;
+                }
+                while (low < high && arr[high] == arr[high - 1]) {
+                    high--;
+                }
+
+                low++;
+                high--;
+            } else if (sum > 0) {
+                high--;
+            } else {
+                low++;
+            }
+        }
+        return result;
+    }
+
+    // Check for overlapping intervals
+    public static boolean hasOverlap(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+        for (int i = 1; i < intervals.length; i++) {
+            int[] prev = intervals[i - 1];
+            int[] curr = intervals[i];
+
+            if (prev[1] > curr[0]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Meeting room availability
+    public static boolean meetingRoomsI(int[][] intervals) {
+        return hasOverlap(intervals);
+    }
+
+    // Merge intervals
+    public static List<int[]> mergeIntervals(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        List<int[]> result = new ArrayList<>();
+        int[] prev = intervals[0];
+
+        for (int i = 1; i < intervals.length; i++) {
+            int[] curr = intervals[i];
+            if (curr[0] <= prev[1]) {
+                prev[1] = Math.max(curr[1], prev[1]);
+            } else {
+                result.add(prev);
+                prev = curr;
+            }
+        }
+        result.add(prev);
+        return result;
+    }
+
+    // Three-sum with sum zero
+    public static List<int[]> threeSum(int[] arr) {
+        Arrays.sort(arr);
+        List<int[]> result = new ArrayList<>();
+
+        for (int i = 0; i < arr.length - 2; i++) {
+            if (i > 0 && arr[i] == arr[i - 1]) {
+                continue;  // Skip duplicates
+            }
+
+            int low = i + 1;
+            int high = arr.length - 1;
+
+            while (low < high) {
+                int sum = arr[i] + arr[low] + arr[high];
+                if (sum < 0) {
+                    low++;
+                } else if (sum > 0) {
+                    high--;
+                } else {
+                    result.add(new int[]{arr[i], arr[low], arr[high]});
+
+                    // Skip duplicates
+                    while (low < high && arr[low] == arr[low + 1]) low++;
+                    while (low < high && arr[high] == arr[high - 1]) high--;
+
+                    low++;
+                    high--;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        // Example test cases can be written here to check each method
+    }
+}
