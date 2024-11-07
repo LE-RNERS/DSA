@@ -1,0 +1,150 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class SortingAlgorithms {
+
+    // Bubble Sort
+    public static int[] bubbleSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n; i++) {
+            boolean swapped = false;
+            for (int j = 1; j < n - i; j++) {
+                if (arr[j - 1] > arr[j]) {
+                    int temp = arr[j - 1];
+                    arr[j - 1] = arr[j];
+                    arr[j] = temp;
+                    swapped = true;
+                }
+            }
+            if (!swapped) {
+                return arr;
+            }
+        }
+        return arr;
+    }
+
+    // Find minimum index for selection sort
+    public static int getMinIndex(int[] arr, int start) {
+        int minIndex = start;
+        for (int i = start; i < arr.length; i++) {
+            if (arr[i] < arr[minIndex]) {
+                minIndex = i;
+            }
+        }
+        return minIndex;
+    }
+
+    // Selection Sort
+    public static int[] selectionSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n; i++) {
+            int minIndex = getMinIndex(arr, i);
+            int temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        }
+        return arr;
+    }
+
+    // Insertion Sort
+    public static int[] insertionSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 1; i < n; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+        return arr;
+    }
+
+    // Merge two subarrays
+    public static void merge(int[] arr, int low, int mid, int high) {
+        int[] left = new int[mid - low + 1];
+        int[] right = new int[high - mid];
+
+        System.arraycopy(arr, low, left, 0, left.length);
+        System.arraycopy(arr, mid + 1, right, 0, right.length);
+
+        int i = 0, j = 0, k = low;
+
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+                arr[k++] = left[i++];
+            } else {
+                arr[k++] = right[j++];
+            }
+        }
+        while (i < left.length) arr[k++] = left[i++];
+        while (j < right.length) arr[k++] = right[j++];
+    }
+
+    // Merge Sort utility
+    public static void mergeSortUtil(int[] arr, int low, int high) {
+        if (low < high) {
+            int mid = (low + high) / 2;
+            mergeSortUtil(arr, low, mid);
+            mergeSortUtil(arr, mid + 1, high);
+            merge(arr, low, mid, high);
+        }
+    }
+
+    // Merge Sort
+    public static void mergeSort(int[] arr) {
+        mergeSortUtil(arr, 0, arr.length - 1);
+    }
+
+    // Merge two sorted arrays into one sorted array
+    public static List<Integer> mergeSortedArrays(int[] a1, int[] a2) {
+        int i = 0, j = 0;
+        List<Integer> result = new ArrayList<>();
+
+        while (i < a1.length && j < a2.length) {
+            if (a1[i] < a2[j]) {
+                result.add(a1[i++]);
+            } else {
+                result.add(a2[j++]);
+            }
+        }
+        while (i < a1.length) result.add(a1[i++]);
+        while (j < a2.length) result.add(a2[j++]);
+
+        return result;
+    }
+
+    // Partition function for Quick Sort
+    public static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int pi = low;
+
+        for (int i = low; i < high; i++) {
+            if (arr[i] <= pivot) {
+                int temp = arr[pi];
+                arr[pi] = arr[i];
+                arr[i] = temp;
+                pi++;
+            }
+        }
+        int temp = arr[pi];
+        arr[pi] = arr[high];
+        arr[high] = temp;
+        return pi;
+    }
+
+    // Quick Sort
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int partitionIndex = partition(arr, low, high);
+            quickSort(arr, low, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, high);
+        }
+    }
+
+    // Quick Sort helper function
+    public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+}
